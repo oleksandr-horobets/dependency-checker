@@ -23,15 +23,16 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 public class CheckerTest {
+    private final File inspectedJar = new File("build/libs/test-set1-inspected.jar");
+    private final File dependency1 = new File("build/libs/test-set1-dependency1.jar");
+    private final File dependency2 = new File("build/libs/test-set1-dependency2.jar");
+
     @Test
     public void testIntegration() throws IOException {
-        final File inspectedJar = new File("build/libs/test-set1-inspected.jar");
-        final File dependency1 = new File("build/libs/test-set1-dependency1.jar");
-        final File dependency2 = new File("build/libs/test-set1-dependency2.jar");
-
         Set<File> classpathJars = new HashSet<>();
         classpathJars.add(dependency1);
         classpathJars.add(dependency2);
@@ -42,5 +43,19 @@ public class CheckerTest {
         checker.addClasspathJars(classpathJars);
 
         assertTrue(checker.getRedundantDependencies().contains(dependency2.getAbsoluteFile()));
+    }
+
+    @Test
+    public void testDoNotCountInspectedArtifactItself() throws IOException {
+        Set<File> classpathJars = new HashSet<>();
+        classpathJars.add(inspectedJar);
+        classpathJars.add(dependency1);
+
+        Checker checker = new Checker();
+
+        checker.setInspectedJar(inspectedJar);
+        checker.addClasspathJars(classpathJars);
+
+        assertFalse(checker.getRedundantDependencies().contains(inspectedJar.getAbsoluteFile()));
     }
 }

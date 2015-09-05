@@ -64,7 +64,7 @@ public class Checker {
         Set<File> notUsed = new HashSet<>();
 
         for (ClazzpathUnit unit : clazzpath.getUnits()) {
-            if (!used.contains(unit)) {
+            if (!used.contains(unit) && !inspectedUnit.toString().equals(unit.toString())) {
                 notUsed.add(new File(unit.toString()));
             }
         }

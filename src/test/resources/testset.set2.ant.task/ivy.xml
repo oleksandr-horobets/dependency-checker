@@ -1,0 +1,6 @@
+<ivy-module version="2.0">
+    <info organisation="net.iwtp.tools.dependency.checker" module="test-set2"/>
+    <dependencies>
+        <dependency org="org.vafer" name="jdependency" rev="1.0"/>
+    </dependencies>
+</ivy-module>
