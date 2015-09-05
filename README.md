@@ -37,6 +37,10 @@ If there are some unused jars in your classpath Dependency Checker will show war
 
     [WARNING] Redundant dependency: /home/user/libs/redundant-dependency.jar
 
+Build Status
+============
+[![Build Status](https://travis-ci.org/oleksandr-horobets/dependency-checker.svg)](https://travis-ci.org/oleksandr-horobets/dependency-checker)
+
 License
 =======
 
