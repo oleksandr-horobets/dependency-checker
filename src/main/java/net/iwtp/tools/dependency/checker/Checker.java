@@ -16,6 +16,8 @@
 
 package net.iwtp.tools.dependency.checker;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.vafer.jdependency.Clazz;
 import org.vafer.jdependency.Clazzpath;
 import org.vafer.jdependency.ClazzpathUnit;
@@ -26,6 +28,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Checker {
+    private static final Logger LOG = LoggerFactory.getLogger(Checker.class);
 
     private final Clazzpath clazzpath;
     private ClazzpathUnit inspectedUnit;
@@ -35,31 +38,36 @@ public class Checker {
     }
 
     public void setInspectedJar(File inspectedJar) throws IOException {
+        LOG.debug("Added jar for inspection: {}", inspectedJar);
         inspectedUnit = clazzpath.addClazzpathUnit(inspectedJar);
     }
 
     public void addClasspathJars(Set<File> classpathJars) throws IOException {
         for (File file : classpathJars) {
+            LOG.debug("Added classpath unit: {}", file);
             clazzpath.addClazzpathUnit(file);
         }
     }
 
     public Set<File> getRedundantDependencies() {
+        LOG.debug("Started new redundant dependencies inspection");
         Set<Clazz> dependencies = new HashSet<>();
 
         dependencies.addAll(inspectedUnit.getDependencies());
         dependencies.addAll(inspectedUnit.getTransitiveDependencies());
-
 
         Set<ClazzpathUnit> used = new HashSet<>();
 
         for (ClazzpathUnit unit : clazzpath.getUnits()) {
             for (Clazz dependency : dependencies) {
                 if (unit.getClazzes().contains(dependency)) {
+                    LOG.debug("Found source of {}, it's: {}", dependency, unit);
                     used.add(unit);
                 }
             }
         }
+
+        LOG.debug("Used dependencies: {}", used);
 
         Set<File> notUsed = new HashSet<>();
 
@@ -68,6 +76,8 @@ public class Checker {
                 notUsed.add(new File(unit.toString()));
             }
         }
+
+        LOG.debug("Not used dependencies: {}", notUsed);
 
         return notUsed;
     }

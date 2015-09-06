@@ -28,6 +28,7 @@ import static org.junit.Assert.assertTrue;
 
 public class CheckerTest {
     private final File inspectedJar = new File("build/libs/test-set1-inspected.jar");
+    private final File annotation = new File("build/libs/test-set1-annotation.jar");
     private final File dependency1 = new File("build/libs/test-set1-dependency1.jar");
     private final File dependency2 = new File("build/libs/test-set1-dependency2.jar");
 
@@ -57,5 +58,18 @@ public class CheckerTest {
         checker.addClasspathJars(classpathJars);
 
         assertFalse(checker.getRedundantDependencies().contains(inspectedJar.getAbsoluteFile()));
+    }
+
+    @Test
+    public void testAnnotation() throws IOException {
+        Set<File> classpathJars = new HashSet<>();
+        classpathJars.add(annotation);
+
+        Checker checker = new Checker();
+
+        checker.setInspectedJar(inspectedJar);
+        checker.addClasspathJars(classpathJars);
+
+        assertFalse(checker.getRedundantDependencies().contains(annotation.getAbsoluteFile()));
     }
 }

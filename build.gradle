@@ -16,6 +16,9 @@ repositories {
 dependencies {
     compile('org.vafer:jdependency:1.0')
     compile('org.apache.ant:ant:1.9.6')
+    compile('org.slf4j:slf4j-api:1.7.12')
+    compile('ch.qos.logback:logback-classic:1.1.3')
+    compile('ch.qos.logback:logback-core:1.1.3')
     testCompile group: 'junit', name: 'junit', version: '4.11'
 }
 
@@ -40,6 +43,14 @@ task testSet1Dependency2Jar(type: Jar) {
     include("**/set1/**/Dependency2.class")
 }
 
+task testSet1AnnotationJar(type: Jar) {
+    from(sourceSets.test.output.classesDir)
+    version(null)
+    baseName("test-set1-annotation")
+    include("**/set1/**/Annotation.class")
+}
+
 test.dependsOn("testSet1InspectedJar")
 test.dependsOn("testSet1Dependency1Jar")
 test.dependsOn("testSet1Dependency2Jar")
+test.dependsOn("testSet1AnnotationJar")

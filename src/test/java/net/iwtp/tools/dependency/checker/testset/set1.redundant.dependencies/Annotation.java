@@ -16,9 +16,12 @@
 
 package net.iwtp.tools.dependency.checker.testset.set1.redundant.dependencies;
 
-@Annotation
-public class InspectedClass {
-    public static void main(String[] args) {
-        new Dependency1().sayHello();
-    }
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.CLASS)
+public @interface Annotation {
 }
